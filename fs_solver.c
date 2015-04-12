@@ -3,8 +3,7 @@
 #include <stdlib.h>
 #include <math.h>
 
-#define SIZE 16
-#define N 4
+#define SIZE 9
 #define MAX_SWAP 10
 
 int fix[SIZE][SIZE];
@@ -28,7 +27,7 @@ void printP2(int puzzle[][SIZE]){
    for(int i = 1; i <= SIZE; ++i) {
       for(int j = 1; j <= SIZE; ++j) printf("|%d", puzzle[i-1][j-1]);
       printf("|\n");
-      if (i%N == 0) printf("+-----+-----+-----+\n");
+      if (i%3 == 0) printf("+-----+-----+-----+\n");
    }
 }
 
@@ -79,14 +78,14 @@ int costF(int puzzle[][SIZE]) {
    for (int row = 0; row < SIZE; row++) {
       for (int col = 0; col < SIZE; col++) {
          num = puzzle[row][col];
-         colStart = (col/N) * N;
-         rowStart = (row/N) * N;
+         colStart = (col/3) * 3;
+         rowStart = (row/3) * 3;
          for(int i = 0; i < SIZE; i++) {
             if (puzzle[row][i] == num && col != i)
             cost++;
             if (puzzle[i][col] == num && row != i)
             cost++;
-            if (puzzle[rowStart + (i%N)][colStart + (i/N)] == num && (row != rowStart + (i%N) || col != colStart + (i/N)))
+            if (puzzle[rowStart + (i%3)][colStart + (i/3)] == num && (row != rowStart + (i%3) || col != colStart + (i/3)))
             cost++;
          }
       }
