@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include "sa_solver.c"
-#include "greedy_solver.c"
+#include "dfs_solver.c"
 
 void printPuzzle(int puzzle[][SIZE]){
    printf("\n+--------+--------+--------+\n");
