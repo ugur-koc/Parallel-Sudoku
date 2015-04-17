@@ -27,15 +27,15 @@ int main() {
 void test9(char alg){
    int found=0;
    clock_t finish, start;
-   int puzzle[SIZE][SIZE] = {{0,0,2,0,0,0,3,6,0},
+   int puzzle[SIZE][SIZE] = {{5,8,2,0,0,0,3,6,0},
       {3,0,4,0,2,0,0,0,1},
       {0,0,0,0,6,0,0,0,5},
       {1,0,0,3,0,0,9,0,0},
       {0,9,0,0,8,6,5,0,0},
       {0,2,0,0,0,5,0,0,3},
-      {8,0,0,7,0,0,0,0,0},
-      {0,0,0,0,9,0,0,0,2},
-      {0,1,0,0,0,0,0,0,8}};
+      {8,0,0,7,0,0,0,9,4},
+      {0,0,0,1,9,0,0,0,2},
+      {0,1,0,6,0,0,7,0,8}};
 
    start = clock();
    if (alg == 's') {
@@ -45,7 +45,7 @@ void test9(char alg){
    }
    finish = clock();
    
-   if (!found) { printPuzzle(puzzle);
+   if (found) { printPuzzle(puzzle);
    } else printf("\n\nNO SOLUTION\n\n");
    printf("StartTime:%ld, EndTime:%ld, ExecutionTime:%f\n", start, finish, (double)(finish - start) / CLOCKS_PER_SEC);
 }

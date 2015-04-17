@@ -7,18 +7,22 @@
 #define N 3
 #define MAX_SWAP 10
 
-int fix[SIZE][SIZE];
+struct coor{
+   int x,y;
+};
 
+int fix[SIZE][SIZE];
+struct coor map[MAX_SWAP][2];
 void copy(int src[][SIZE], int dest[][SIZE]) {
-  int i,j;
+   int i,j;
    for (i = 0; i < SIZE; i++)
    for (j = 0; j < SIZE; j++)
    dest[i][j] = src[i][j];
 }
 
 void printP(int puzzle[][SIZE]){
-  int i,j;
-  printf("\n+-----+-----+-----+\n");
+   int i,j;
+   printf("\n+-----+-----+-----+\n");
    for(i = 1; i <= SIZE; ++i) {
       for(j = 1; j <= SIZE; ++j) printf("|%d", puzzle[i-1][j-1]);
       printf("|\n");
@@ -28,7 +32,7 @@ void printP(int puzzle[][SIZE]){
 
 
 void initialize(int puzzle[][SIZE]) {
-  int x, y, coorX, coorY, numbers[SIZE+1]={0};
+   int x, y, coorX, coorY, numbers[SIZE+1]={0};
    for (x = 0; x < SIZE; x++){
       for (y = 0; y < SIZE; y++){
          if (puzzle[x][y]){
@@ -51,7 +55,7 @@ void initialize(int puzzle[][SIZE]) {
 }
 
 void transform(int puzzle[][SIZE], int neighbor[][SIZE], int swapCount) {
-  int i, row1, col1, row2, col2;
+   int i, row1, col1, row2, col2;
    copy(puzzle, neighbor);
    for (i = 0; i < swapCount; i++) {
       do {
@@ -64,12 +68,48 @@ void transform(int puzzle[][SIZE], int neighbor[][SIZE], int swapCount) {
       } while (fix[row2][col2] || (row1 == row2 && col1 == col2) || puzzle[row1][col1] == puzzle[row2][col2]);
       neighbor[row2][col2] = puzzle[row1][col1];
       neighbor[row1][col1] = puzzle[row2][col2];
+      map[i][0].x = row1;
+      map[i][0].y = col1;
+      map[i][1].x = row2;
+      map[i][1].y = col2;
+      map[i+1][0].x = -1;
+      printf("row1:%d, col1:%d, row2:%d, col2:%d\n", map[i][0].x, map[i][0].y, map[i][1].x, map[i][1].y);
    }
 }
 
-//this function is time consuming, can be improved most probably
+int delta(int puzzle[][SIZE], int neighbor[][SIZE]) {
+   int i, j, k = 0 , row, col, colS, rowS, numP, numN, cost=0;
+   printf("\n");
+   while (map[k][0].x != -1) {
+      for (j=0; j<=1; j++) {
+         row = map[k][j].x;
+         col = map[k][j].y;
+         colS = (col/N) * N;
+         rowS = (row/N) * N;
+         numP = puzzle[row][col];
+         numN = neighbor[row][col];
+         printf("row:%d, col:%d, numP:%d, numN:%d\n", row, col, numP, numN);
+         for(i = 0; i < SIZE; i++) {
+            if (puzzle[row][i] == numP && col != i)
+            cost--;
+            if (puzzle[i][col] == numP && row != i)
+            cost--;
+            if (puzzle[rowS + (i%N)][colS + (i/N)] == numP && (row != rowS + (i%N) || col != colS + (i/N)))
+            cost--;
+            if (neighbor[row][i] == numN && col != i)
+            cost++;
+            if (neighbor[i][col] == numN && row != i)
+            cost++;
+            if (neighbor[rowS + (i%N)][colS + (i/N)] == numN && (row != rowS + (i%N) || col != colS + (i/N)))
+            cost++;
+         }
+      }
+      k++;
+   }
+   return cost;
+}
 int costF(int puzzle[][SIZE]) {
-  int i, row, col, colStart, rowStart, num, cost = 0;
+   int i, row, col, colStart, rowStart, num, cost = 0;
    for (row = 0; row < SIZE; row++) {
       for (col = 0; col < SIZE; col++) {
          num = puzzle[row][col];
@@ -87,23 +127,21 @@ int costF(int puzzle[][SIZE]) {
    }
    return cost;
 }
-
 int anneal(int puzzle[][SIZE]) {
-   int delta, costN, costB, best[SIZE][SIZE], neighbor[SIZE][SIZE], cost;
-   double prob, stoppingTemp = 0.001, rate = 0.0001, temperature = 10; //startingTemp = 1
+   int dlta, costN, costB, best[SIZE][SIZE], neighbor[SIZE][SIZE], cost, local1, local2;
+   double prob, stoppingTemp = 0.001, rate = 0.0001, temperature = 1; //startingTemp = 1
    initialize(puzzle);
    copy(puzzle, best);
    cost = costF(puzzle);
    costB = cost;
    while (cost > 0 && stoppingTemp < temperature) {
       transform(puzzle, neighbor, 1);
-      costN = costF(neighbor);
-      delta = costN - cost;
-      printP(puzzle);
-      printP(neighbor);
-      printf("delta:%d, costP:%d, costN:%d", delta, cost, costN);
-      if (delta < 0 || (((double)(rand() % 1000) / 1000.0) <= exp(-delta / temperature))) {
+      dlta = delta(puzzle, neighbor);
+      if (dlta < 0 || (((double)(rand() % 1000) / 1000.0) <= exp(-dlta / temperature))) {
+         printf("delta:%d, cost:%d\n", dlta, cost);
+         costN = costF(neighbor);
          copy(neighbor, puzzle);
+         
          cost = costN;
          if (costB > costN){
             costB = costN;
@@ -113,5 +151,5 @@ int anneal(int puzzle[][SIZE]) {
       temperature -= rate * temperature;
    }
    copy(best, puzzle);
-   return !costB ? 1: 0;
+   return costB ? 0 : 1;
 }
