@@ -5,55 +5,86 @@
 #include "sa_solver.c"
 #include "dfs_solver.c"
 
+void test9(char alg);
+//void test16(char alg);
+
 void printPuzzle(int puzzle[][SIZE]){
-   printf("\n+--------+--------+--------+\n");
-   for(int i = 1; i <= SIZE; ++i) {
-      for(int j = 1; j <= SIZE; ++j) printf("|%d", puzzle[i-1][j-1]);
+   int i,j;
+   printf("\n+-----+-----+-----+\n");
+   for(i = 1; i <= SIZE; ++i) {
+      for(j = 1; j <= SIZE; ++j) printf("|%d", puzzle[i-1][j-1]);
       printf("|\n");
-      if (i%N == 0) printf("+--------+--------+--------+\n");
+      if (i%N == 0) printf("+-----+-----+-----+\n");
    }
 }
 
 int main() {
-   clock_t finish, start;
-   double time_diff;
-   int puzzle[SIZE][SIZE] = {{0,0,0,9,0,0,16,1,4,0,10,0,0,0,0,12},
-   {0,15,0,0,8,7,0,0,3,0,9,0,0,13,0,1},
-   {7,0,4,0,0,10,0,0,0,0,0,0,0,0,0,0},
-   {0,0,0,16,0,11,14,0,0,0,7,0,0,0,0,8},
-   {0,0,10,0,14,12,0,4,0,0,0,0,15,0,0,0},
-   {0,3,6,0,0,0,0,0,13,0,0,0,0,16,0,5},
-   {0,0,7,14,0,0,0,8,12,0,5,15,13,0,6,0},
-   {0,11,0,13,16,0,0,0,0,14,0,0,12,0,0,4},
-   {0,0,13,0,0,14,0,0,8,0,0,0,0,0,0,0},
-   {0,0,0,5,6,15,12,7,0,9,0,14,0,4,13,0},
-   {0,0,15,0,0,0,5,0,0,7,0,0,11,10,9,0},
-   {0,6,0,7,10,0,0,11,0,5,0,0,0,0,0,0},
-   {0,0,3,0,0,8,0,14,0,2,0,0,0,0,15,10},
-   {15,9,0,0,4,0,0,0,0,0,14,12,0,11,0,0},
-   {0,0,0,0,13,6,1,0,0,3,11,0,14,12,16,0},
-   {0,1,11,12,15,0,0,0,0,10,0,13,0,6,0,9}};
-   
-   /*
-    srand(time(NULL));
-    start = clock();
-    if(!anneal(puzzle)) { printPuzzle(puzzle);
-    } else printf("\n\nNO SOLUTION\n\n");
-    finish = clock();
-    time_diff = (double)(finish - start) / CLOCKS_PER_SEC;
-    printf("StartTime:%ld, StartTime:%ld, Execution time:%f\n", start, finish, time_diff);
-    */
-   
-   start = clock();
-   if(solve(puzzle, 0, 0)) { printPuzzle(puzzle);
-   } else printf("\n\nNO SOLUTION\n\n");
-   finish = clock();
-   time_diff = (double)(finish - start) / CLOCKS_PER_SEC;
-   printf("StartTime:%ld, StartTime:%ld, Execution time:%f\n", start, finish, time_diff);
+   test9('s');
+   //test16('d');
    return 0;
 }
 
+void test9(char alg){
+   int found=0;
+   clock_t finish, start;
+   int puzzle[SIZE][SIZE] = {{0,0,2,0,0,0,3,6,0},
+      {3,0,4,0,2,0,0,0,1},
+      {0,0,0,0,6,0,0,0,5},
+      {1,0,0,3,0,0,9,0,0},
+      {0,9,0,0,8,6,5,0,0},
+      {0,2,0,0,0,5,0,0,3},
+      {8,0,0,7,0,0,0,0,0},
+      {0,0,0,0,9,0,0,0,2},
+      {0,1,0,0,0,0,0,0,8}};
+
+   start = clock();
+   if (alg == 's') {
+      found = anneal(puzzle);
+   } else if (alg == 'd') {
+      found = solve(puzzle, 0, 0);
+   }
+   finish = clock();
+   
+   if (!found) { printPuzzle(puzzle);
+   } else printf("\n\nNO SOLUTION\n\n");
+   printf("StartTime:%ld, EndTime:%ld, ExecutionTime:%f\n", start, finish, (double)(finish - start) / CLOCKS_PER_SEC);
+}
+
 /*
+void test16(char alg){
+   int cost=0;
+   clock_t finish, start;
+   int puzzle[16][16] = {{0,0,0,0,0,8,0,16,12,14,9,0,1,0,11,10},
+      {0,7,12,4,0,0,0,14,0,0,0,0,0,15,9,5},
+      {0,0,10,0,0,0,0,9,7,0,11,0,0,0,0,0},
+      {0,0,0,15,0,0,13,5,0,0,0,0,8,0,0,0},
+      {0,0,0,9,0,12,0,7,5,3,0,0,4,0,0,0},
+      {0,4,0,3,0,0,15,0,10,0,0,0,11,0,14,0},
+      {0,15,0,13,0,0,1,0,0,6,14,0,0,0,3,0},
+      {0,11,0,7,2,0,14,0,0,4,15,0,0,12,13,9},
+      {0,0,13,0,0,0,0,0,8,10,7,0,0,0,0,0},
+      {0,0,0,12,13,0,0,0,0,0,0,9,15,0,0,0},
+      {8,10,15,2,14,0,0,0,0,0,4,13,0,6,0,0},
+      {0,0,7,5,9,0,3,6,0,0,0,0,0,0,0,13},
+      {14,12,11,0,0,0,0,0,0,0,8,0,3,10,0,0},
+      {2,0,0,0,6,0,0,0,0,9,0,15,0,5,0,7},
+      {0,0,0,0,10,0,16,0,0,0,5,0,0,14,0,12},
+      {0,0,0,0,0,0,0,0,13,0,0,12,0,0,16,0}};
+   
+   start = clock();
+   if (alg == 's'){
+      cost = anneal(puzzle);
+   }else if (alg == 'd') {
+      cost = solve(puzzle, 0, 0);
+   }
+   finish = clock();
+   
+   if (!cost) { printPuzzle(puzzle);
+   } else printf("\n\nNO SOLUTION\n\n");
+   printf("StartTime:%ld, EndTime:%ld, ExecutionTime:%f\n", start, finish, (double)(finish - start) / CLOCKS_PER_SEC);
+}
+
+
  {{2, 4, 9, 8, 5, 7, 3, 1, 6},
  {8, 1, 3, 6, 4, 9, 7, 2, 5},
  {5, 6, 7, 3, 2, 1, 9, 8, 4},

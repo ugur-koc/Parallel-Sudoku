@@ -1,11 +1,11 @@
 #include <stdio.h>
 
-#define SIZE 16
-#define N 4
+#define SIZE 9
+#define N 3
 
 int isValid(int puzzle[][SIZE], int row, int col, int num) {
-   int rowStart = (row / N) * N, colStart = (col / N) * N;
-   for (int i = 0; i < SIZE; ++i)
+  int i, rowStart = (row / N) * N, colStart = (col / N) * N;
+   for (i = 0; i < SIZE; ++i)
    if ((puzzle[row][i] == num) || (puzzle[i][col] == num) ||
        (puzzle[rowStart + (i % N)][colStart + (i / N)] == num)) return 0;
    return 1;

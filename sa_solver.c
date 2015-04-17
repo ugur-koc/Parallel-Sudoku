@@ -3,30 +3,24 @@
 #include <stdlib.h>
 #include <math.h>
 
-#define SIZE 16
-#define N 4
+#define SIZE 9
+#define N 3
 #define MAX_SWAP 10
 
 int fix[SIZE][SIZE];
 
 void copy(int src[][SIZE], int dest[][SIZE]) {
-   for (int i = 0; i < SIZE; i++)
-   for (int j = 0; j < SIZE; j++)
+  int i,j;
+   for (i = 0; i < SIZE; i++)
+   for (j = 0; j < SIZE; j++)
    dest[i][j] = src[i][j];
 }
 
 void printP(int puzzle[][SIZE]){
-   for(int i = 1; i <= SIZE; ++i) {
-      for(int j = 1; j <= SIZE; ++j)
-      printf("%d,", puzzle[i-1][j-1]);
-   }
-   printf("\n");
-}
-
-void printP2(int puzzle[][SIZE]){
-   printf("\n+-----+-----+-----+\n");
-   for(int i = 1; i <= SIZE; ++i) {
-      for(int j = 1; j <= SIZE; ++j) printf("|%d", puzzle[i-1][j-1]);
+  int i,j;
+  printf("\n+-----+-----+-----+\n");
+   for(i = 1; i <= SIZE; ++i) {
+      for(j = 1; j <= SIZE; ++j) printf("|%d", puzzle[i-1][j-1]);
       printf("|\n");
       if (i%N == 0) printf("+-----+-----+-----+\n");
    }
@@ -34,9 +28,9 @@ void printP2(int puzzle[][SIZE]){
 
 
 void initialize(int puzzle[][SIZE]) {
-   int x, coorX, coorY, numbers[SIZE+1]={0};
+  int x, y, coorX, coorY, numbers[SIZE+1]={0};
    for (x = 0; x < SIZE; x++){
-      for (int y = 0; y < SIZE; y++){
+      for (y = 0; y < SIZE; y++){
          if (puzzle[x][y]){
             fix[x][y]=1;
             numbers[puzzle[x][y]]++;
@@ -57,9 +51,9 @@ void initialize(int puzzle[][SIZE]) {
 }
 
 void transform(int puzzle[][SIZE], int neighbor[][SIZE], int swapCount) {
-   int row1, col1, row2, col2;
+  int i, row1, col1, row2, col2;
    copy(puzzle, neighbor);
-   for (int i = 0; i < swapCount; i++) {
+   for (i = 0; i < swapCount; i++) {
       do {
          row1 = (rand() % SIZE);
          col1 = (rand() % SIZE);
@@ -75,13 +69,13 @@ void transform(int puzzle[][SIZE], int neighbor[][SIZE], int swapCount) {
 
 //this function is time consuming, can be improved most probably
 int costF(int puzzle[][SIZE]) {
-   int colStart, rowStart, num, cost = 0;
-   for (int row = 0; row < SIZE; row++) {
-      for (int col = 0; col < SIZE; col++) {
+  int i, row, col, colStart, rowStart, num, cost = 0;
+   for (row = 0; row < SIZE; row++) {
+      for (col = 0; col < SIZE; col++) {
          num = puzzle[row][col];
          colStart = (col/N) * N;
          rowStart = (row/N) * N;
-         for(int i = 0; i < SIZE; i++) {
+         for(i = 0; i < SIZE; i++) {
             if (puzzle[row][i] == num && col != i)
             cost++;
             if (puzzle[i][col] == num && row != i)
@@ -96,7 +90,7 @@ int costF(int puzzle[][SIZE]) {
 
 int anneal(int puzzle[][SIZE]) {
    int delta, costN, costB, best[SIZE][SIZE], neighbor[SIZE][SIZE], cost;
-   double prob, stoppingTemp = 0.001, rate = 0.0001, temperature = 1; //startingTemp = 1
+   double prob, stoppingTemp = 0.001, rate = 0.0001, temperature = 10; //startingTemp = 1
    initialize(puzzle);
    copy(puzzle, best);
    cost = costF(puzzle);
@@ -105,9 +99,9 @@ int anneal(int puzzle[][SIZE]) {
       transform(puzzle, neighbor, 1);
       costN = costF(neighbor);
       delta = costN - cost;
-      //printP2(puzzle);
-      //printP2(neighbor);
-      //printf("delta:%d, costP:%d, costN:%d", delta, cost, costN);
+      printP(puzzle);
+      printP(neighbor);
+      printf("delta:%d, costP:%d, costN:%d", delta, cost, costN);
       if (delta < 0 || (((double)(rand() % 1000) / 1000.0) <= exp(-delta / temperature))) {
          copy(neighbor, puzzle);
          cost = costN;
@@ -119,5 +113,5 @@ int anneal(int puzzle[][SIZE]) {
       temperature -= rate * temperature;
    }
    copy(best, puzzle);
-   return costB;
+   return !costB ? 1: 0;
 }
