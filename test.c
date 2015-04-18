@@ -8,7 +8,7 @@
 void test9(char alg);
 //void test16(char alg);
 
-void printPuzzle(int puzzle[][SIZE]){
+void printPuzzle(char puzzle[][SIZE]){
    int i,j;
    printf("\n+-----+-----+-----+\n");
    for(i = 1; i <= SIZE; ++i) {
@@ -27,7 +27,7 @@ int main() {
 void test9(char alg){
    int found=0;
    clock_t finish, start;
-   int puzzle[SIZE][SIZE] = {{5,8,2,0,0,0,3,6,0},
+   char puzzle[SIZE][SIZE] = {{5,8,2,0,0,0,3,6,0},
       {3,0,4,0,2,0,0,0,1},
       {0,0,0,0,6,0,0,0,5},
       {1,0,0,3,0,0,9,0,0},

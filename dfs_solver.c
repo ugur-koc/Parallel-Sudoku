@@ -3,7 +3,7 @@
 #define SIZE 9
 #define N 3
 
-int isValid(int puzzle[][SIZE], int row, int col, int num) {
+int isValid(char puzzle[][SIZE], int row, int col, int num) {
   int i, rowStart = (row / N) * N, colStart = (col / N) * N;
    for (i = 0; i < SIZE; ++i)
    if ((puzzle[row][i] == num) || (puzzle[i][col] == num) ||
@@ -11,7 +11,7 @@ int isValid(int puzzle[][SIZE], int row, int col, int num) {
    return 1;
 }
 
-int solve(int puzzle[][SIZE], int row, int col) {
+int solve(char puzzle[][SIZE], int row, int col) {
    if(row < SIZE && col < SIZE) {
       if (puzzle[row][col] != 0) {
          if ((col + 1) < SIZE) return solve(puzzle, row, col + 1);
