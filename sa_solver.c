@@ -3,8 +3,8 @@
 #include <stdlib.h>
 #include <math.h>
 
-#define SIZE 9
-#define N 3
+#define SIZE 16
+#define N 4
 #define MAX_SWAP 1
 
 void transform(char puzzle[][SIZE], char neighbor[][SIZE], int swapCount);
@@ -21,18 +21,22 @@ void printA(char puzzle[][SIZE][SIZE+2]);
 
 char aux[SIZE][SIZE][SIZE + 2];
 struct coor map[MAX_SWAP][2];
+
 int anneal(char puzzle[][SIZE]) {
    char best[SIZE][SIZE], neighbor[SIZE][SIZE];
    int dlta, costB, cost;
-   double stoppingTemp = 0.0001, rate = 0.00001, temperature = 1;
+   double stoppingTemp = 0.000001, rate = 0.00001, temperature = 1000;
    initialize(puzzle);
    copy(puzzle, best);
    cost = costF(puzzle);
    costB = cost;
+   printf("Cost:%d\n",costB);
+   //printP(puzzle);
    while (cost > 0 && stoppingTemp < temperature) {
       transform(puzzle, neighbor, MAX_SWAP);
       dlta = delta(puzzle,neighbor);
       if (dlta < 0 || (((double)(rand() % 1000) / 1000.0) <= exp(-dlta / temperature))) {
+           // printf("accept\n");
          accept(neighbor, puzzle);
          cost += dlta;;
          if (costB > cost){
@@ -41,9 +45,12 @@ int anneal(char puzzle[][SIZE]) {
             //printP(puzzle);
          }
       }
+      //else printf("reject\n");
       temperature -= rate * temperature;
    }
    copy(best, puzzle);
+   printf("Cost:%d\n",costB);
+   //printP(puzzle);
    return costB ? 0 : 1;
 }
 
@@ -68,6 +75,7 @@ void transform(char puzzle[][SIZE], char neighbor[][SIZE], int swapCount) {
          row2 = (rand() % SIZE);
          col2 = (rand() % SIZE);
       } while (aux[row2][col2][SIZE] || (row1 == row2 && col1 == col2) || puzzle[row1][col1] == puzzle[row2][col2] || !(aux[row1][col1][puzzle[row2][col2]-1] || aux[row2][col2][puzzle[row1][col1]-1]));
+      //printf("r1:%d, c1:%d, r2:%d, c2:%d, puzzle[r1][c1]:%d, puzzl2[r2][c2]:%d ",row1,col1,row2,col2,puzzle[row1][col1], puzzle[row2][col2]);
       neighbor[row2][col2] = puzzle[row1][col1];
       neighbor[row1][col1] = puzzle[row2][col2];
       map[i][0].x = row1;
@@ -95,7 +103,7 @@ int costF(char puzzle[][SIZE]) {
          }
       }
    }
-   return cost;
+   return cost/2;
 }
 
 int delta(char puzzle[][SIZE], char neighbor[][SIZE]) {
@@ -125,7 +133,7 @@ int delta(char puzzle[][SIZE], char neighbor[][SIZE]) {
       }
       k++;
    }
-   return cost*2;
+   return cost;
 }
 
 void initialize(char puzzle[][SIZE]) {
@@ -145,7 +153,8 @@ void initialize(char puzzle[][SIZE]) {
          }
       }
    }
-
+   //printP(puzzle);
+   //printA(aux);
    for (x = 0; x < SIZE; x++){
       for (y = 0; y < SIZE; y++){
          if (!puzzle[x][y] && aux[x][y][SIZE + 1] == 1){
@@ -162,11 +171,12 @@ void initialize(char puzzle[][SIZE]) {
          }
       }
    }
-
+   //printP(puzzle);
+   //printA(aux);
    for (x = 1; x <= SIZE; x++) {
       while (numbers[x] < SIZE) {
          coorX = (rand() % SIZE), coorY = (rand() % SIZE);
-         if (!puzzle[coorX][coorY]) { //  && (aux[coorX][coorY][x-1] || (rand() % 2))
+         if (!puzzle[coorX][coorY] && (aux[coorX][coorY][x-1] || !((rand() % SIZE)/N))) {
             //printf("x:%d, coorX:%d, coorY:%d, puzzle[coorX][coorY]:%d, aux[coorX][coorY][x-1]:%d\n",x, coorX,coorY,puzzle[coorX][coorY],aux[coorX][coorY][x-1]);
             puzzle[coorX][coorY] = x;
             numbers[x]++;
