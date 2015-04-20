@@ -5,7 +5,7 @@
 
 #define SIZE 9
 #define N 3
-#define MAX_SWAP 10
+#define MAX_SWAP 1
 
 void transform(char puzzle[][SIZE], char neighbor[][SIZE], int swapCount);
 int delta(char puzzle[][SIZE], char neighbor[][SIZE]);
@@ -15,29 +15,30 @@ void copy(char src[][SIZE], char dest[][SIZE]);
 void printP(char puzzle[][SIZE]);
 void initialize(char puzzle[][SIZE]);
 char isVld(char puzzle[][SIZE], int row, int col, char num);
-void updateAux(char numbers[], char puzzle[][SIZE], char aux[][SIZE][SIZE + 2], int row, int col, char num);
+void elimination(char numbers[], char puzzle[][SIZE], char aux[][SIZE][SIZE + 2], int row, int col, char num);
 struct coor{ char x, y; };
+void printA(char puzzle[][SIZE][SIZE+2]);
 
 char aux[SIZE][SIZE][SIZE + 2];
 struct coor map[MAX_SWAP][2];
 int anneal(char puzzle[][SIZE]) {
    char best[SIZE][SIZE], neighbor[SIZE][SIZE];
-   int dlta, costN, costB, cost;
-   double prob, stoppingTemp = 0.0001, rate = 0.00001, temperature = 1; //startingTemp = 1
+   int dlta, costB, cost;
+   double stoppingTemp = 0.0001, rate = 0.00001, temperature = 1;
    initialize(puzzle);
    copy(puzzle, best);
    cost = costF(puzzle);
    costB = cost;
    while (cost > 0 && stoppingTemp < temperature) {
-      transform(puzzle, neighbor, 1);
+      transform(puzzle, neighbor, MAX_SWAP);
       dlta = delta(puzzle,neighbor);
       if (dlta < 0 || (((double)(rand() % 1000) / 1000.0) <= exp(-dlta / temperature))) {
-         //printf("delta:%d, cost:%d\n", dlta, cost);
          accept(neighbor, puzzle);
          cost += dlta;;
          if (costB > cost){
             costB = cost;
             copy(puzzle, best);
+            //printP(puzzle);
          }
       }
       temperature -= rate * temperature;
@@ -66,8 +67,7 @@ void transform(char puzzle[][SIZE], char neighbor[][SIZE], int swapCount) {
       do {
          row2 = (rand() % SIZE);
          col2 = (rand() % SIZE);
-      } while (aux[row2][col2][SIZE] || (row1 == row2 && col1 == col2) || puzzle[row1][col1] == puzzle[row2][col2]);
-      //|| (!aux[row1][col1][puzzle[row2][col2]] && !aux[row2][col2][puzzle[row1][col1]])
+      } while (aux[row2][col2][SIZE] || (row1 == row2 && col1 == col2) || puzzle[row1][col1] == puzzle[row2][col2] || !(aux[row1][col1][puzzle[row2][col2]-1] || aux[row2][col2][puzzle[row1][col1]-1]));
       neighbor[row2][col2] = puzzle[row1][col1];
       neighbor[row1][col1] = puzzle[row2][col2];
       map[i][0].x = row1;
@@ -142,59 +142,89 @@ void initialize(char puzzle[][SIZE]) {
                aux[x][y][z] = isVld(puzzle, x, y, z+1);
                aux[x][y][SIZE + 1] += aux[x][y][z];
             }
-            //printf(" x:%d, y:%d, z:%d, count:%d\n", x , y, z, aux[x][y][SIZE+1]);
          }
       }
    }
-   
- /*  for (x = 0; x < SIZE; x++){
+
+   for (x = 0; x < SIZE; x++){
       for (y = 0; y < SIZE; y++){
          if (!puzzle[x][y] && aux[x][y][SIZE + 1] == 1){
             for (z = 0; z < SIZE; z++){
                if (aux[x][y][z]) {
-                  printf("x:%d, y:%d, z:%d, count:%d\n", x , y, z, aux[x][y][SIZE+1]);
-                  updateAux(numbers, puzzle, aux, x, y, z);
+                  //printf("x:%d, y:%d, z:%d, count:%d\n", x , y, z+1, aux[x][y][SIZE+1]);
+                  //printP(puzzle);
+                  elimination(numbers, puzzle, aux, x, y, z+1);
+                  //printP(puzzle);
+                  //printA(aux);
                   break;
                }
             }
          }
       }
-   }*/
-   
+   }
+
    for (x = 1; x <= SIZE; x++) {
       while (numbers[x] < SIZE) {
          coorX = (rand() % SIZE), coorY = (rand() % SIZE);
-         if (!puzzle[coorX][coorY] ) { //&& aux[coorX][coorY][x]
+         if (!puzzle[coorX][coorY]) { //  && (aux[coorX][coorY][x-1] || (rand() % 2))
+            //printf("x:%d, coorX:%d, coorY:%d, puzzle[coorX][coorY]:%d, aux[coorX][coorY][x-1]:%d\n",x, coorX,coorY,puzzle[coorX][coorY],aux[coorX][coorY][x-1]);
             puzzle[coorX][coorY] = x;
             numbers[x]++;
+            //printP(puzzle);
+            //printA(aux);
          }
       }
    }
 }
 
-void updateAux(char numbers[], char puzzle[][SIZE], char aux[][SIZE][SIZE + 2], int row, int col, char num) {
-   int i, rowStart = (row / N) * N, colStart = (col / N) * N;
+void elimination(char numbers[], char puzzle[][SIZE], char aux[][SIZE][SIZE + 2], int row, int col, char num) {
+   int i, j, rowStart = (row / N) * N, colStart = (col / N) * N;
+   //printA(aux);
+   //printP(puzzle);
    aux[row][col][SIZE] = SIZE + 1;
+   aux[row][col][SIZE+1]=0;
+   aux[row][col][num-1]=0;
    puzzle[row][col] = num;
    numbers[num]++;
    for (i = 0; i < SIZE; ++i){
-      if (aux[row][i][num] && i!=col){
-         aux[row][i][SIZE+1]--;
-         aux[row][i][num] = 0;
-         printf("Col i:%d, x:%d, y:%d, num:%d, count:%d\n", i, row , col, num, aux[row][i][SIZE+1]);
-         if (aux[row][i][SIZE+1] == 1) updateAux(numbers, puzzle, aux, row, i, num);
+      if (aux[row][i][num-1]){
+         aux[row][i][num-1] = 0;
+         //printf("Col i:%d, x:%d, y:%d, num:%d, count:%d\n", i, row , i, num, aux[row][i][SIZE+1]);
+         if (--aux[row][i][SIZE+1] == 1){
+            for (j=0; j<SIZE; j++) {
+               if (aux[row][i][j]) {
+                  //printf("elimination: row:%d, i:%d, j+1:%d\n", row, i, j+1);
+                  elimination(numbers, puzzle, aux, row, i, j+1);
+               }
+            }
+            
+         }
       }
-      if (aux[i][col][num] && i!=row){
-         aux[i][col][SIZE+1]--;
-         aux[i][col][num] = 0;
-         printf("Row i:%d, x:%d, y:%d, num:%d, count:%d\n", i, row , col, num, aux[i][col][SIZE+1]);
-         if (aux[row][i][SIZE+1] == 1) updateAux(numbers, puzzle, aux, i, col, num);
+      if (aux[i][col][num-1]){
+         aux[i][col][num-1] = 0;
+         //printf("Row i:%d, x:%d, y:%d, num:%d, count:%d\n", i, i , col, num, aux[i][col][SIZE+1]);
+         if (--aux[i][col][SIZE+1] == 1){
+            for (j=0; j<SIZE; j++) {
+               if (aux[i][col][j]) {
+                 // printf("elimination: i:%d, col:%d, j+1:%d\n", i, col,j+1);
+                  elimination(numbers, puzzle, aux, i, col, j+1);
+                  break;
+               }
+            }
+         }
       }
-      if (aux[rowStart + (i % N)][colStart + (i / N)][num] && (row != rowStart + (i%N) || col != colStart + (i/N))){
-         aux[rowStart + (i % N)][colStart + (i / N)][SIZE+1]--;
-         aux[rowStart + (i % N)][colStart + (i / N)][num] = 0;
-         printf("Sub i:%d, x:%d, y:%d, num:%d, count:%d\n", i, row , col, num, aux[rowStart + (i % N)][colStart + (i / N)][SIZE+1]);
-         if (aux[row][i][SIZE+1] == 1) updateAux(numbers, puzzle, aux, rowStart + (i % N), colStart + (i / N), num);
+      if (aux[rowStart + (i % N)][colStart + (i / N)][num-1]){
+         aux[rowStart + (i % N)][colStart + (i / N)][num-1] = 0;
+         //printf("Sub i:%d, x:%d, y:%d, num:%d, count:%d\n", i, rowStart + (i % N) , colStart + (i / N), num, aux[rowStart + (i % N)][colStart + (i / N)][SIZE+1]);
+         if (--aux[rowStart + (i % N)][colStart + (i / N)][SIZE+1] == 1){
+            for (j=0; j<SIZE; j++) {
+               if (aux[rowStart + (i % N)][colStart + (i / N)][j]) {
+                  //printf("elimination: rowStart+(iN):%d, colStart+(i/N):%d, j+1:%d\n", rowStart + (i % N), colStart + (i / N),j+1);
+                  elimination(numbers, puzzle, aux, rowStart + (i % N), colStart + (i / N), j+1);
+                  break;
+               }
+            }
+         }
       }
    }
 }
@@ -220,6 +250,21 @@ void printP(char puzzle[][SIZE]){
    for(i = 1; i <= SIZE; ++i) {
       for(j = 1; j <= SIZE; ++j) printf("|%d", puzzle[i-1][j-1]);
       printf("|\n");
+      if (i%N == 0) printf("+-----+-----+-----+\n");
+   }
+}
+
+void printA(char puzzle[][SIZE][SIZE+2]){
+   int i,j,k;
+   printf("\n+-----+-----+-----+\n");
+   for(i = 1; i <= SIZE; ++i) {
+      for(j = 1; j <= SIZE; ++j){
+         for (k=0; k<SIZE+2; k++) {
+            printf("%d", puzzle[i-1][j-1][k]%SIZE);
+         }
+         printf("|");
+      }
+         printf("\n");
       if (i%N == 0) printf("+-----+-----+-----+\n");
    }
 }
