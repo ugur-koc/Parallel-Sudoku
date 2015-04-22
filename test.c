@@ -49,7 +49,8 @@ void test9(char alg){
    } else printf("\n\nNO SOLUTION\n\n");
    printf("StartTime:%ld, EndTime:%ld, ExecutionTime:%f\n", start, finish, (double)(finish - start) / CLOCKS_PER_SEC);
 }
-*/
+ */
+
 
 void test16(char alg){
    int found=0;
@@ -82,6 +83,7 @@ void test16(char alg){
    } else printf("\n\nNO SOLUTION\n\n");
    printf("StartTime:%ld, EndTime:%ld, ExecutionTime:%f\n", start, finish, (double)(finish - start) / CLOCKS_PER_SEC);
 }
+ 
 /*
  {0,0,2,0,0,0,3,6,0},
  {3,0,4,0,2,0,0,0,1},

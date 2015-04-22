@@ -12,13 +12,14 @@ int isValid(char puzzle[][SIZE], int row, int col, int num) {
 }
 
 int solve(char puzzle[][SIZE], int row, int col) {
+   int i;
    if(row < SIZE && col < SIZE) {
       if (puzzle[row][col] != 0) {
          if ((col + 1) < SIZE) return solve(puzzle, row, col + 1);
          else if ((row + 1) < SIZE) return solve(puzzle, row + 1, 0);
          else return 1;
       } else {
-         for (int i = 0; i < SIZE; ++i) {
+         for (i = 0; i < SIZE; ++i) {
             if (isValid(puzzle, row, col, i + 1)) {
                puzzle[row][col] = i + 1;
                if ((col + 1) < SIZE) {

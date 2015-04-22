@@ -16,8 +16,9 @@ void printP(char puzzle[][SIZE]);
 void initialize(char puzzle[][SIZE]);
 char isVld(char puzzle[][SIZE], int row, int col, char num);
 void elimination(char numbers[], char puzzle[][SIZE], char aux[][SIZE][SIZE + 2], int row, int col, char num);
-struct coor{ char x, y; };
 void printA(char puzzle[][SIZE][SIZE+2]);
+
+struct coor{ char x, y;};
 
 char aux[SIZE][SIZE][SIZE + 2];
 struct coor map[MAX_SWAP][2];
@@ -25,7 +26,7 @@ struct coor map[MAX_SWAP][2];
 int anneal(char puzzle[][SIZE]) {
    char best[SIZE][SIZE], neighbor[SIZE][SIZE];
    int dlta, costB, cost;
-   double stoppingTemp = 0.000001, rate = 0.00001, temperature = 1000;
+   double stoppingTemp = 0.0000001, rate = 0.000001, temperature = 1000000;
    initialize(puzzle);
    copy(puzzle, best);
    cost = costF(puzzle);
@@ -36,7 +37,7 @@ int anneal(char puzzle[][SIZE]) {
       transform(puzzle, neighbor, MAX_SWAP);
       dlta = delta(puzzle,neighbor);
       if (dlta < 0 || (((double)(rand() % 1000) / 1000.0) <= exp(-dlta / temperature))) {
-           // printf("accept\n");
+         // printf("accept\n");
          accept(neighbor, puzzle);
          cost += dlta;;
          if (costB > cost){
@@ -70,11 +71,11 @@ void transform(char puzzle[][SIZE], char neighbor[][SIZE], int swapCount) {
       do {
          row1 = (rand() % SIZE);
          col1 = (rand() % SIZE);
-      } while (aux[row1][col1][SIZE]);
+      } while (aux[row1][col1][SIZE+1]);
       do {
          row2 = (rand() % SIZE);
          col2 = (rand() % SIZE);
-      } while (aux[row2][col2][SIZE] || (row1 == row2 && col1 == col2) || puzzle[row1][col1] == puzzle[row2][col2] || !(aux[row1][col1][puzzle[row2][col2]-1] || aux[row2][col2][puzzle[row1][col1]-1]));
+      } while (aux[row2][col2][SIZE+1] || (row1 == row2 && col1 == col2) || puzzle[row1][col1] == puzzle[row2][col2] || (!aux[row1][col1][puzzle[row2][col2]] && !aux[row2][col2][puzzle[row1][col1]]));
       //printf("r1:%d, c1:%d, r2:%d, c2:%d, puzzle[r1][c1]:%d, puzzl2[r2][c2]:%d ",row1,col1,row2,col2,puzzle[row1][col1], puzzle[row2][col2]);
       neighbor[row2][col2] = puzzle[row1][col1];
       neighbor[row1][col1] = puzzle[row2][col2];
@@ -138,17 +139,18 @@ int delta(char puzzle[][SIZE], char neighbor[][SIZE]) {
 
 void initialize(char puzzle[][SIZE]) {
    int x, y, coorX, coorY;
-   char z, numbers[SIZE+1]={0}, num = 0;
+   char z, numbers[SIZE+1]={0}, num = 0, counters[SIZE]={0};
+   struct coor sortedIndexes[SIZE+1][SIZE*SIZE];
    for (x = 0; x < SIZE; x++){
       for (y = 0; y < SIZE; y++){
          if (puzzle[x][y]){
-            aux[x][y][SIZE] = SIZE + 1;
+            aux[x][y][SIZE+1] = SIZE + 1;
             numbers[puzzle[x][y]]++;
          } else {
-            aux[x][y][SIZE] = 0; aux[x][y][SIZE + 1] = 0;
-            for (z = 0; z < SIZE; z++){
-               aux[x][y][z] = isVld(puzzle, x, y, z+1);
-               aux[x][y][SIZE + 1] += aux[x][y][z];
+            aux[x][y][SIZE+1] = 0; aux[x][y][0] = 0;
+            for (z = 1; z <= SIZE; z++){
+               aux[x][y][z] = isVld(puzzle, x, y, z);
+               aux[x][y][0] += aux[x][y][z];
             }
          }
       }
@@ -157,26 +159,43 @@ void initialize(char puzzle[][SIZE]) {
    //printA(aux);
    for (x = 0; x < SIZE; x++){
       for (y = 0; y < SIZE; y++){
-         if (!puzzle[x][y] && aux[x][y][SIZE + 1] == 1){
-            for (z = 0; z < SIZE; z++){
-               if (aux[x][y][z]) {
-                  //printf("x:%d, y:%d, z:%d, count:%d\n", x , y, z+1, aux[x][y][SIZE+1]);
-                  //printP(puzzle);
-                  elimination(numbers, puzzle, aux, x, y, z+1);
-                  //printP(puzzle);
-                  //printA(aux);
-                  break;
+         if (!puzzle[x][y]){
+            if (aux[x][y][0] == 1){
+               for (z = 1; z <= SIZE; z++){
+                  if (aux[x][y][z]) {
+                     elimination(numbers, puzzle, aux, x, y, z);
+                     break;
+                  }
                }
+            } else if (aux[x][y][0] > 1){
+               //printf("Sorted Index: x:%d, y:%d, size:%d, counter:%d\n",x, y, aux[x][y][SIZE + 1], counters[aux[x][y][SIZE + 1]]);
+               sortedIndexes[aux[x][y][0]][counters[aux[x][y][0]]].x=x;
+               sortedIndexes[aux[x][y][0]][counters[aux[x][y][0]]++].y=y;
             }
          }
       }
    }
-   //printP(puzzle);
+   printP(puzzle);
    //printA(aux);
+
+   for (x=2; x<SIZE/N; x++) {
+      for (y=0; y<counters[x]; y++) {
+         do {
+            num = (rand() % SIZE) + 1;
+         } while (numbers[num] == SIZE || (!aux[sortedIndexes[x][y].x][sortedIndexes[x][y].y][num-1])); // && !(rand() % N)
+         puzzle[sortedIndexes[x][y].x][sortedIndexes[x][y].y]=num;
+         //printf("Number:%d, numbers[num]:%d\n", num, numbers[num]);
+         numbers[num]++;
+      }
+   }
+ 
+   //printP(puzzle);
+ 
    for (x = 1; x <= SIZE; x++) {
+      printf("Numbers: x:%d, count:%d\n",x, numbers[x]);
       while (numbers[x] < SIZE) {
          coorX = (rand() % SIZE), coorY = (rand() % SIZE);
-         if (!puzzle[coorX][coorY] && (aux[coorX][coorY][x-1] || !((rand() % SIZE)/N))) {
+         if (!puzzle[coorX][coorY] && (aux[coorX][coorY][x] || !((rand() % SIZE)/N))) {
             //printf("x:%d, coorX:%d, coorY:%d, puzzle[coorX][coorY]:%d, aux[coorX][coorY][x-1]:%d\n",x, coorX,coorY,puzzle[coorX][coorY],aux[coorX][coorY][x-1]);
             puzzle[coorX][coorY] = x;
             numbers[x]++;
@@ -184,53 +203,56 @@ void initialize(char puzzle[][SIZE]) {
             //printA(aux);
          }
       }
+      printf("Numbers: x:%d, count:%d\n",x, numbers[x]);
    }
+   printP(puzzle);
 }
+
 
 void elimination(char numbers[], char puzzle[][SIZE], char aux[][SIZE][SIZE + 2], int row, int col, char num) {
    int i, j, rowStart = (row / N) * N, colStart = (col / N) * N;
    //printA(aux);
    //printP(puzzle);
-   aux[row][col][SIZE] = SIZE + 1;
-   aux[row][col][SIZE+1]=0;
-   aux[row][col][num-1]=0;
+   aux[row][col][SIZE+1] = SIZE + 1;
+   aux[row][col][0]=0;
+   aux[row][col][num]=0;
    puzzle[row][col] = num;
    numbers[num]++;
    for (i = 0; i < SIZE; ++i){
-      if (aux[row][i][num-1]){
-         aux[row][i][num-1] = 0;
+      if (aux[row][i][num]){
+         aux[row][i][num] = 0;
          //printf("Col i:%d, x:%d, y:%d, num:%d, count:%d\n", i, row , i, num, aux[row][i][SIZE+1]);
-         if (--aux[row][i][SIZE+1] == 1){
-            for (j=0; j<SIZE; j++) {
+         if (--aux[row][i][0] == 1){
+            for (j=1; j<=SIZE; j++) {
                if (aux[row][i][j]) {
                   //printf("elimination: row:%d, i:%d, j+1:%d\n", row, i, j+1);
-                  elimination(numbers, puzzle, aux, row, i, j+1);
+                  elimination(numbers, puzzle, aux, row, i, j);
                }
             }
             
          }
       }
-      if (aux[i][col][num-1]){
-         aux[i][col][num-1] = 0;
+      if (aux[i][col][num]){
+         aux[i][col][num] = 0;
          //printf("Row i:%d, x:%d, y:%d, num:%d, count:%d\n", i, i , col, num, aux[i][col][SIZE+1]);
-         if (--aux[i][col][SIZE+1] == 1){
-            for (j=0; j<SIZE; j++) {
+         if (--aux[i][col][0] == 1){
+            for (j=1; j<=SIZE; j++) {
                if (aux[i][col][j]) {
-                 // printf("elimination: i:%d, col:%d, j+1:%d\n", i, col,j+1);
-                  elimination(numbers, puzzle, aux, i, col, j+1);
+                  // printf("elimination: i:%d, col:%d, j+1:%d\n", i, col,j+1);
+                  elimination(numbers, puzzle, aux, i, col, j);
                   break;
                }
             }
          }
       }
-      if (aux[rowStart + (i % N)][colStart + (i / N)][num-1]){
-         aux[rowStart + (i % N)][colStart + (i / N)][num-1] = 0;
+      if (aux[rowStart + (i % N)][colStart + (i / N)][num]){
+         aux[rowStart + (i % N)][colStart + (i / N)][num] = 0;
          //printf("Sub i:%d, x:%d, y:%d, num:%d, count:%d\n", i, rowStart + (i % N) , colStart + (i / N), num, aux[rowStart + (i % N)][colStart + (i / N)][SIZE+1]);
-         if (--aux[rowStart + (i % N)][colStart + (i / N)][SIZE+1] == 1){
-            for (j=0; j<SIZE; j++) {
+         if (--aux[rowStart + (i % N)][colStart + (i / N)][0] == 1){
+            for (j=1; j<=SIZE; j++) {
                if (aux[rowStart + (i % N)][colStart + (i / N)][j]) {
                   //printf("elimination: rowStart+(iN):%d, colStart+(i/N):%d, j+1:%d\n", rowStart + (i % N), colStart + (i / N),j+1);
-                  elimination(numbers, puzzle, aux, rowStart + (i % N), colStart + (i / N), j+1);
+                  elimination(numbers, puzzle, aux, rowStart + (i % N), colStart + (i / N), j);
                   break;
                }
             }
@@ -258,7 +280,7 @@ void printP(char puzzle[][SIZE]){
    int i,j;
    printf("\n+-----+-----+-----+\n");
    for(i = 1; i <= SIZE; ++i) {
-      for(j = 1; j <= SIZE; ++j) printf("|%d", puzzle[i-1][j-1]);
+      for(j = 1; j <= SIZE; ++j) printf("|%2d", puzzle[i-1][j-1]);
       printf("|\n");
       if (i%N == 0) printf("+-----+-----+-----+\n");
    }
@@ -274,7 +296,7 @@ void printA(char puzzle[][SIZE][SIZE+2]){
          }
          printf("|");
       }
-         printf("\n");
+      printf("\n");
       if (i%N == 0) printf("+-----+-----+-----+\n");
    }
 }
