@@ -1,7 +1,7 @@
 #include <stdio.h>
 
-#define SIZE 16
-#define N 4
+#define SIZE 9
+#define N 3
 
 int isValid(char puzzle[][SIZE], int row, int col, int num) {
   int i, rowStart = (row / N) * N, colStart = (col / N) * N;

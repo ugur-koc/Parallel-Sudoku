@@ -3,8 +3,8 @@
 #include <stdlib.h>
 #include <math.h>
 
-#define SIZE 16
-#define N 4
+#define SIZE 9
+#define N 3
 #define MAX_SWAP 1
 
 void transform(char puzzle[][SIZE], char neighbor[][SIZE], int swapCount);
@@ -26,7 +26,7 @@ struct coor map[MAX_SWAP][2];
 int anneal(char puzzle[][SIZE]) {
    char best[SIZE][SIZE], neighbor[SIZE][SIZE];
    int dlta, costB, cost;
-   double stoppingTemp = 0.0000001, rate = 0.000001, temperature = 1000000;
+   double stoppingTemp = 0.000001, rate = 0.0001, temperature = 100;
    initialize(puzzle);
    copy(puzzle, best);
    cost = costF(puzzle);
@@ -175,9 +175,9 @@ void initialize(char puzzle[][SIZE]) {
          }
       }
    }
-   printP(puzzle);
+   //printP(puzzle);
    //printA(aux);
-
+/*
    for (x=2; x<SIZE/N; x++) {
       for (y=0; y<counters[x]; y++) {
          do {
@@ -188,11 +188,11 @@ void initialize(char puzzle[][SIZE]) {
          numbers[num]++;
       }
    }
- 
+ */
    //printP(puzzle);
  
    for (x = 1; x <= SIZE; x++) {
-      printf("Numbers: x:%d, count:%d\n",x, numbers[x]);
+      //printf("Numbers: x:%d, count:%d\n",x, numbers[x]);
       while (numbers[x] < SIZE) {
          coorX = (rand() % SIZE), coorY = (rand() % SIZE);
          if (!puzzle[coorX][coorY] && (aux[coorX][coorY][x] || !((rand() % SIZE)/N))) {
@@ -203,9 +203,9 @@ void initialize(char puzzle[][SIZE]) {
             //printA(aux);
          }
       }
-      printf("Numbers: x:%d, count:%d\n",x, numbers[x]);
+      //printf("Numbers: x:%d, count:%d\n",x, numbers[x]);
    }
-   printP(puzzle);
+  // printP(puzzle);
 }
 
 

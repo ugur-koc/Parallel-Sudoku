@@ -2,11 +2,11 @@
 #include <time.h>
 #include <stdlib.h>
 #include <math.h>
-#include "sa_solver.c"
+#include "sa_solver_backup.c"
 #include "dfs_solver.c"
 
-//void test9(char alg);
-void test16(char alg);
+void test9(char alg);
+//void test16(char alg);
 
 void printPuzzle(char puzzle[][SIZE]){
    int i,j;
@@ -19,11 +19,11 @@ void printPuzzle(char puzzle[][SIZE]){
 }
 
 int main() {
-   //test9('s');
-   test16('s');
+   test9('d');
+   //test16('s');
    return 0;
 }
-/*
+
 void test9(char alg){
    int found=0;
    clock_t finish, start;
@@ -49,8 +49,8 @@ void test9(char alg){
    } else printf("\n\nNO SOLUTION\n\n");
    printf("StartTime:%ld, EndTime:%ld, ExecutionTime:%f\n", start, finish, (double)(finish - start) / CLOCKS_PER_SEC);
 }
-*/
 
+/*
 void test16(char alg){
    int found=0;
    clock_t finish, start;
@@ -82,6 +82,8 @@ void test16(char alg){
    } else printf("\n\nNO SOLUTION\n\n");
    printf("StartTime:%ld, EndTime:%ld, ExecutionTime:%f\n", start, finish, (double)(finish - start) / CLOCKS_PER_SEC);
 }
+*/
+
 /*
  {0,0,2,0,0,0,3,6,0},
  {3,0,4,0,2,0,0,0,1},
