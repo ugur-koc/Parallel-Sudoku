@@ -1,0 +1,425 @@
+make: `solver.exe' is up to date.
+start_full_time.tv_usec = 164715
+end_full_time.tv_usec = 177839
+const_prop_time = 3837893
+search_time = 3996764
+full_time = 4013124
+Validation successful!
+Sudoku_SerialSolver : 0
+******************************************
+make: `solver.exe' is up to date.
+start_full_time.tv_usec = 188367
+end_full_time.tv_usec = 187394
+const_prop_time = 3838363
+search_time = 3997997
+full_time = 3999027
+Validation successful!
+Sudoku_SerialSolver : 1
+******************************************
+make: `solver.exe' is up to date.
+start_full_time.tv_usec = 196567
+end_full_time.tv_usec = 212150
+const_prop_time = 3850767
+search_time = 4014479
+full_time = 4015583
+Validation successful!
+Sudoku_SerialSolver : 2
+******************************************
+make: `solver.exe' is up to date.
+start_full_time.tv_usec = 220629
+end_full_time.tv_usec = 227917
+const_prop_time = 3846764
+search_time = 4006273
+full_time = 4007288
+Validation successful!
+Sudoku_SerialSolver : 3
+******************************************
+make: `solver.exe' is up to date.
+start_full_time.tv_usec = 236357
+end_full_time.tv_usec = 240831
+const_prop_time = 3843374
+search_time = 4003486
+full_time = 4004474
+Validation successful!
+Sudoku_SerialSolver : 4
+******************************************
+make: `solver.exe' is up to date.
+start_full_time.tv_usec = 343786
+end_full_time.tv_usec = 352392
+const_prop_time = 299
+search_time = 2007500
+full_time = 2008606
+Validation successful!
+Sudoku_ParallelSolver : 0
+******************************************
+make: `solver.exe' is up to date.
+start_full_time.tv_usec = 362111
+end_full_time.tv_usec = 349437
+const_prop_time = 306
+search_time = 1986168
+full_time = 1987326
+Validation successful!
+Sudoku_ParallelSolver : 1
+******************************************
+make: `solver.exe' is up to date.
+start_full_time.tv_usec = 358575
+end_full_time.tv_usec = 338068
+const_prop_time = 323
+search_time = 1978465
+full_time = 1979493
+Validation successful!
+Sudoku_ParallelSolver : 2
+******************************************
+make: `solver.exe' is up to date.
+start_full_time.tv_usec = 346562
+end_full_time.tv_usec = 324839
+const_prop_time = 308
+search_time = 1977274
+full_time = 1978277
+Validation successful!
+Sudoku_ParallelSolver : 3
+******************************************
+make: `solver.exe' is up to date.
+start_full_time.tv_usec = 333509
+end_full_time.tv_usec = 312472
+const_prop_time = 309
+search_time = 1977957
+full_time = 1978963
+Validation successful!
+Sudoku_ParallelSolver : 4
+******************************************
+make: `solver.exe' is up to date.
+STATUS: pthread_join(0) = 37002
+STATUS: pthread_join(1) = 35854
+start_full_time.tv_usec = 368374
+end_full_time.tv_usec = 981854
+const_prop_time = 306
+search_time = 1608339
+full_time = 1613480
+Validation successful!
+Sudoku_ParallelSolver_EhsanLocking : 0
+******************************************
+make: `solver.exe' is up to date.
+STATUS: pthread_join(0) = 32382
+STATUS: pthread_join(1) = 31298
+start_full_time.tv_usec = 3387
+end_full_time.tv_usec = 490188
+const_prop_time = 304
+search_time = 1485781
+full_time = 1486801
+Validation successful!
+Sudoku_ParallelSolver_EhsanLocking : 1
+******************************************
+make: `solver.exe' is up to date.
+STATUS: pthread_join(0) = 25889
+STATUS: pthread_join(1) = 26595
+start_full_time.tv_usec = 511556
+end_full_time.tv_usec = 797006
+const_prop_time = 309
+search_time = 1284290
+full_time = 1285450
+Validation successful!
+Sudoku_ParallelSolver_EhsanLocking : 2
+******************************************
+make: `solver.exe' is up to date.
+STATUS: pthread_join(0) = 26251
+STATUS: pthread_join(1) = 25506
+start_full_time.tv_usec = 818415
+end_full_time.tv_usec = 38876
+const_prop_time = 320
+search_time = 1219438
+full_time = 1220461
+Validation successful!
+Sudoku_ParallelSolver_EhsanLocking : 3
+******************************************
+make: `solver.exe' is up to date.
+STATUS: pthread_join(0) = 24828
+STATUS: pthread_join(1) = 24545
+start_full_time.tv_usec = 57386
+end_full_time.tv_usec = 227944
+const_prop_time = 303
+search_time = 1169544
+full_time = 1170558
+Validation successful!
+Sudoku_ParallelSolver_EhsanLocking : 4
+******************************************
+make: `solver.exe' is up to date.
+Thread#0 going to wait on flag#1
+Thread#0 going to go to sleep
+Thread#1 going to signal the flag#1
+Signaled
+Thread#0 woke up
+Thread#0 going to wait on flag#1
+Thread#0 going to go to sleep
+Thread#1 going to signal the flag#1
+Signaled
+Thread#0 woke up
+Thread#0 going to wait on flag#1
+Thread#0 going to go to sleep
+Thread#1 going to signal the flag#1
+Signaled
+Thread#0 woke up
+Thread#0 going to wait on flag#1
+Thread#0 going to go to sleep
+Thread#1 going to signal the flag#1
+Signaled
+Thread#0 woke up
+Thread#0 going to wait on flag#1
+Thread#0 going to go to sleep
+Thread#1 going to signal the flag#1
+Signaled
+Thread#0 woke up
+start_full_time.tv_usec = 265099
+end_full_time.tv_usec = 276695
+const_prop_time = 305
+search_time = 2010370
+full_time = 2011596
+Validation successful!
+Sudoku_ParallelSolver_Signalling : 0
+******************************************
+make: `solver.exe' is up to date.
+Thread#0 going to wait on flag#1
+Thread#0 going to go to sleep
+Thread#1 going to signal the flag#1
+Signaled
+Thread#0 woke up
+Thread#0 going to wait on flag#1
+Thread#0 going to go to sleep
+Thread#1 going to signal the flag#1
+Signaled
+Thread#0 woke up
+Thread#0 going to wait on flag#1
+Thread#0 going to go to sleep
+Thread#1 going to signal the flag#1
+Signaled
+Thread#0 woke up
+Thread#0 going to wait on flag#1
+Thread#0 going to go to sleep
+Thread#1 going to signal the flag#1
+Signaled
+Thread#0 woke up
+Thread#0 going to wait on flag#1
+Thread#0 going to go to sleep
+Thread#1 going to signal the flag#1
+Signaled
+Thread#0 woke up
+start_full_time.tv_usec = 300226
+end_full_time.tv_usec = 310286
+const_prop_time = 305
+search_time = 2009006
+full_time = 2010060
+Validation successful!
+Sudoku_ParallelSolver_Signalling : 1
+******************************************
+make: `solver.exe' is up to date.
+Thread#0 going to wait on flag#1
+Thread#0 going to go to sleep
+Thread#1 going to signal the flag#1
+Signaled
+Thread#0 woke up
+Thread#0 going to wait on flag#1
+Thread#0 going to go to sleep
+Thread#1 going to signal the flag#1
+Signaled
+Thread#0 woke up
+start_full_time.tv_usec = 334245
+end_full_time.tv_usec = 427396
+const_prop_time = 302
+search_time = 2092003
+full_time = 2093151
+Validation successful!
+Sudoku_ParallelSolver_Signalling : 2
+******************************************
+make: `solver.exe' is up to date.
+Thread#0 going to wait on flag#1
+Thread#0 going to go to sleep
+Thread#1 going to signal the flag#1
+Signaled
+Thread#0 woke up
+Thread#0 going to wait on flag#1
+Thread#0 going to go to sleep
+Thread#1 going to signal the flag#1
+Signaled
+Thread#0 woke up
+Thread#0 going to wait on flag#1
+Thread#0 going to go to sleep
+Thread#1 going to signal the flag#1
+Signaled
+Thread#0 woke up
+Thread#0 going to wait on flag#1
+Thread#0 going to go to sleep
+Thread#1 going to signal the flag#1
+Signaled
+Thread#0 woke up
+start_full_time.tv_usec = 457363
+end_full_time.tv_usec = 462918
+const_prop_time = 305
+search_time = 2004508
+full_time = 2005555
+Validation successful!
+Sudoku_ParallelSolver_Signalling : 3
+******************************************
+make: `solver.exe' is up to date.
+Thread#0 going to wait on flag#1
+Thread#0 going to go to sleep
+Thread#1 going to signal the flag#1
+Signaled
+Thread#0 woke up
+Thread#0 going to wait on flag#1
+Thread#0 going to go to sleep
+Thread#1 going to signal the flag#1
+Signaled
+Thread#0 woke up
+Thread#0 going to wait on flag#1
+Thread#0 going to go to sleep
+Thread#1 going to signal the flag#1
+Signaled
+Thread#0 woke up
+Thread#0 going to wait on flag#1
+Thread#0 going to go to sleep
+Thread#1 going to signal the flag#1
+Signaled
+Thread#0 woke up
+start_full_time.tv_usec = 487003
+end_full_time.tv_usec = 569925
+const_prop_time = 307
+search_time = 2081771
+full_time = 2082922
+Validation successful!
+Sudoku_ParallelSolver_Signalling : 4
+******************************************
+make: `solver.exe' is up to date.
+start_full_time.tv_usec = 624697
+end_full_time.tv_usec = 312987
+const_prop_time = 307
+search_time = 1687252
+full_time = 1688290
+Validation successful!
+Sudoku_ParallelSolver_locks : 0
+******************************************
+make: `solver.exe' is up to date.
+start_full_time.tv_usec = 322851
+end_full_time.tv_usec = 437602
+const_prop_time = 305
+search_time = 1113717
+full_time = 1114751
+Validation successful!
+Sudoku_ParallelSolver_locks : 1
+******************************************
+make: `solver.exe' is up to date.
+start_full_time.tv_usec = 446612
+end_full_time.tv_usec = 662036
+const_prop_time = 308
+search_time = 1214489
+full_time = 1215424
+Validation successful!
+Sudoku_ParallelSolver_locks : 2
+******************************************
+make: `solver.exe' is up to date.
+start_full_time.tv_usec = 670469
+end_full_time.tv_usec = 636378
+const_prop_time = 305
+search_time = 964991
+full_time = 965909
+Validation successful!
+Sudoku_ParallelSolver_locks : 3
+******************************************
+make: `solver.exe' is up to date.
+start_full_time.tv_usec = 645335
+end_full_time.tv_usec = 699560
+const_prop_time = 305
+search_time = 1053236
+full_time = 1054225
+Validation successful!
+Sudoku_ParallelSolver_locks : 4
+******************************************
+make: `solver.exe' is up to date.
+start_full_time.tv_usec = 728828
+end_full_time.tv_usec = 738218
+const_prop_time = 305
+search_time = 2008349
+full_time = 2009390
+Validation successful!
+Sudoku_ParallelSolver_msgPassing : 0
+******************************************
+make: `solver.exe' is up to date.
+start_full_time.tv_usec = 762897
+end_full_time.tv_usec = 752812
+const_prop_time = 305
+search_time = 1989002
+full_time = 1989915
+Validation successful!
+Sudoku_ParallelSolver_msgPassing : 1
+******************************************
+make: `solver.exe' is up to date.
+start_full_time.tv_usec = 775880
+end_full_time.tv_usec = 791097
+const_prop_time = 302
+search_time = 2014201
+full_time = 2015217
+Validation successful!
+Sudoku_ParallelSolver_msgPassing : 2
+******************************************
+make: `solver.exe' is up to date.
+start_full_time.tv_usec = 814768
+end_full_time.tv_usec = 868118
+const_prop_time = 302
+search_time = 2052219
+full_time = 2053350
+Validation successful!
+Sudoku_ParallelSolver_msgPassing : 3
+******************************************
+make: `solver.exe' is up to date.
+start_full_time.tv_usec = 900962
+end_full_time.tv_usec = 901888
+const_prop_time = 303
+search_time = 1999895
+full_time = 2000926
+Validation successful!
+Sudoku_ParallelSolver_msgPassing : 4
+******************************************
+make: `solver.exe' is up to date.
+start_full_time.tv_usec = 942403
+end_full_time.tv_usec = 874895
+const_prop_time = 307
+search_time = 1931030
+full_time = 1932492
+Validation successful!
+Sudoku_ParallelSolver_msgPassing2 : 0
+******************************************
+make: `solver.exe' is up to date.
+start_full_time.tv_usec = 884825
+end_full_time.tv_usec = 851489
+const_prop_time = 306
+search_time = 1965599
+full_time = 1966664
+Validation successful!
+Sudoku_ParallelSolver_msgPassing2 : 1
+******************************************
+make: `solver.exe' is up to date.
+start_full_time.tv_usec = 860834
+end_full_time.tv_usec = 845633
+const_prop_time = 304
+search_time = 1983667
+full_time = 1984799
+Validation successful!
+Sudoku_ParallelSolver_msgPassing2 : 2
+******************************************
+make: `solver.exe' is up to date.
+start_full_time.tv_usec = 854787
+end_full_time.tv_usec = 556624
+const_prop_time = 305
+search_time = 2700807
+full_time = 2701837
+Validation successful!
+Sudoku_ParallelSolver_msgPassing2 : 3
+******************************************
+make: `solver.exe' is up to date.
+start_full_time.tv_usec = 565169
+end_full_time.tv_usec = 616360
+const_prop_time = 307
+search_time = 2050126
+full_time = 2051191
+Validation successful!
+Sudoku_ParallelSolver_msgPassing2 : 4
+******************************************

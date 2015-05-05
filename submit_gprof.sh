@@ -6,5 +6,7 @@
 
 module load gcc
 
-gcc -o solver sa_solver_16.c -lm
-time ./solver
+gcc -o solver sa_solver.c -lm -pg
+./solver
+
+gprof solver > info.out
