@@ -3,6 +3,10 @@
 #include <stdlib.h>
 #include <math.h>
 #include <pthread.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <errno.h>
+#include <string.h>
 
 #define SIZE 16
 #define N 4
@@ -402,7 +406,7 @@ void printAux(){
 
 int main(int argc, char *argv[]) {
    clock_t finish, start;
-   double stoppingTemp=0.000000001, rate=0.000001, temperature=100;
+   double stoppingTemp=0.000000001, rate=0.000001, temperature=10;
 /*   char puzzle9[9][9] = { {0, 0, 0, 0, 0, 0, 0, 0, 0},
       {0, 0, 3, 6, 0, 9, 7, 0, 0},
       {0, 6, 0, 0, 2, 0, 0, 8, 0},
